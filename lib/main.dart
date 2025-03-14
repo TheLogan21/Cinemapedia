@@ -4,7 +4,10 @@ import 'package:cinemapedia/Config/Theme/theme_app.dart';
 
 import 'package:cinemapedia/Config/router/routers.dart';
 
-void main() {
+import "package:flutter_dotenv/flutter_dotenv.dart";
+
+Future<void> main() async {
+  await dotenv.load(fileName: ".env");
   runApp(const MainApp());
 }
 
