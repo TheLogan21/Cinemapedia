@@ -1,4 +1,5 @@
 import 'package:cinemapedia/Presentation/providers/movies/movies_providers.dart';
+import 'package:cinemapedia/Presentation/widgets/widgets_barril.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -39,14 +40,26 @@ class _HomeViewState extends ConsumerState<_HomeView> {
 
     if (nowPlayingMovies.isEmpty) return CircularProgressIndicator();
 
-    return ListView.builder(
-      itemBuilder: (context, index) {
-        final movie = nowPlayingMovies[index];
-        return ListTile(
-          title: Text(movie.title),
-        );
-      },
-      itemCount: nowPlayingMovies.length,
+    return Column(
+      children: [
+        CustomAppbar(
+          
+
+
+
+        ),
+        Expanded(
+          child: ListView.builder(
+            itemBuilder: (context, index) {
+              final movie = nowPlayingMovies[index];
+              return ListTile(
+                title: Text(movie.title),
+              );
+            },
+            itemCount: nowPlayingMovies.length,
+          ),
+        ),
+      ],
     );
   }
 }
