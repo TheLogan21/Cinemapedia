@@ -1,7 +1,9 @@
-import 'package:cinemapedia/Presentation/providers/movies/movies_providers.dart';
+import 'package:cinemapedia/Presentation/providers/providers_barril.dart';
+
 import 'package:cinemapedia/Presentation/widgets/widgets_barril.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 class HomeScreen extends StatelessWidget {
   static const name = "home_screen";
@@ -11,17 +13,14 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: _HomeView(),
-      ),
+      body: _HomeView(),
+      bottomNavigationBar: CustomBottomNavigationBar(),
     );
   }
 }
 
 class _HomeView extends ConsumerStatefulWidget {
-  const _HomeView({
-    super.key,
-  });
+  const _HomeView();
 
   @override
   _HomeViewState createState() => _HomeViewState();
@@ -36,29 +35,23 @@ class _HomeViewState extends ConsumerState<_HomeView> {
 
   @override
   Widget build(BuildContext context) {
+    DateTime now = DateTime.now();
+    String formattedDate = DateFormat('dd/MM').format(now);
     final nowPlayingMovies = ref.watch(nowPlayingMoviesProvider);
 
-    if (nowPlayingMovies.isEmpty) return CircularProgressIndicator();
+    final nowPlayingMoviesMax6 = ref.watch(moviesSlideShowProvider);
+
+    if (nowPlayingMoviesMax6.isEmpty) return CircularProgressIndicator();
 
     return Column(
       children: [
-        CustomAppbar(
-          
-
-
-
-        ),
-        Expanded(
-          child: ListView.builder(
-            itemBuilder: (context, index) {
-              final movie = nowPlayingMovies[index];
-              return ListTile(
-                title: Text(movie.title),
-              );
-            },
-            itemCount: nowPlayingMovies.length,
-          ),
-        ),
+        const CustomAppbar(),
+        MoviesSlideShow(movies: nowPlayingMoviesMax6),
+        MoviesHorizontalListview(
+          movies: nowPlayingMovies,
+          tittle: "En Cines",
+          subtittle: formattedDate,
+        )
       ],
     );
   }
