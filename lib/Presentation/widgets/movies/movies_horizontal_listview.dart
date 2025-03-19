@@ -2,9 +2,8 @@ import 'package:animate_do/animate_do.dart';
 import 'package:cinemapedia/Config/helpers/humans_formats.dart';
 import 'package:cinemapedia/domain/Entities/movies.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
-class MoviesHorizontalListview extends StatelessWidget {
+class MoviesHorizontalListview extends StatefulWidget {
   final List<Movie> movies;
   final String? tittle;
   final String? subtittle;
@@ -18,23 +17,53 @@ class MoviesHorizontalListview extends StatelessWidget {
       this.loadNextpage});
 
   @override
+  State<MoviesHorizontalListview> createState() =>
+      _MoviesHorizontalListviewState();
+}
+
+class _MoviesHorizontalListviewState extends State<MoviesHorizontalListview> {
+  final scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    scrollController.addListener(
+      () {
+        if (widget.loadNextpage == null) return;
+
+        if ((scrollController.position.pixels + 200) >=
+            scrollController.position.maxScrollExtent) {
+          widget.loadNextpage!();
+        }
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 400,
       child: Column(
         children: [
-          if (tittle != null || subtittle != null)
+          if (widget.tittle != null || widget.subtittle != null)
             _Titulo(
-              subTitle: subtittle,
-              title: tittle,
+              subTitle: widget.subtittle,
+              title: widget.tittle,
             ),
           Expanded(
               child: ListView.builder(
+            controller: scrollController,
             itemBuilder: (context, index) =>
-                _Slide(moviesMostrar: movies[index]),
+                _Slide(moviesMostrar: widget.movies[index]),
             scrollDirection: Axis.horizontal,
             physics: const BouncingScrollPhysics(),
-            itemCount: movies.length,
+            itemCount: widget.movies.length,
           ))
         ],
       ),
