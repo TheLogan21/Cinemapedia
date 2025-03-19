@@ -31,6 +31,9 @@ class _HomeViewState extends ConsumerState<_HomeView> {
   void initState() {
     super.initState();
     ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
+    ref.read(pupularMoviesProvider.notifier).loadNextPage();
+    ref.read(upComingMoviesProvider.notifier).loadNextPage();
+    ref.read(topRatedMoviesProvider.notifier).loadNextPage();
   }
 
   @override
@@ -38,6 +41,9 @@ class _HomeViewState extends ConsumerState<_HomeView> {
     DateTime now = DateTime.now();
     String formattedDate = DateFormat('dd/MM').format(now);
     final nowPlayingMovies = ref.watch(nowPlayingMoviesProvider);
+    final popularMovies = ref.watch(pupularMoviesProvider);
+    final upComingMovies = ref.watch(upComingMoviesProvider);
+    final topRatedMovies = ref.watch(topRatedMoviesProvider);
 
     final nowPlayingMoviesMax6 = ref.watch(moviesSlideShowProvider);
 
@@ -63,23 +69,23 @@ class _HomeViewState extends ConsumerState<_HomeView> {
                 loadNextpage: () =>
                     ref.read(nowPlayingMoviesProvider.notifier).loadNextPage()),
             MoviesHorizontalListview(
-                movies: nowPlayingMovies,
+                movies: upComingMovies,
                 tittle: "Próximmente",
                 subtittle: "Este Mes",
                 loadNextpage: () =>
-                    ref.read(nowPlayingMoviesProvider.notifier).loadNextPage()),
+                    ref.read(upComingMoviesProvider.notifier).loadNextPage()),
             MoviesHorizontalListview(
-                movies: nowPlayingMovies,
+                movies: popularMovies,
                 tittle: "Populaes",
                 //subtittle: formattedDate,
                 loadNextpage: () =>
-                    ref.read(nowPlayingMoviesProvider.notifier).loadNextPage()),
+                    ref.read(pupularMoviesProvider.notifier).loadNextPage()),
             MoviesHorizontalListview(
-                movies: nowPlayingMovies,
+                movies: topRatedMovies,
                 tittle: "Mejor Calificada",
                 // subtittle: "",
                 loadNextpage: () =>
-                    ref.read(nowPlayingMoviesProvider.notifier).loadNextPage()),
+                    ref.read(topRatedMoviesProvider.notifier).loadNextPage()),
             SizedBox(
               height: 25,
             )
